@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Todo App</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="app-wrapper">
+
+    <!-- 앱 헤더 -->
+    <header class="app-header">
+      <h1 class="app-title">My Todos</h1>
+      <p class="app-subtitle">오늘 할 일을 정리해보세요</p>
+    </header>
+
+    <!-- Todo 입력 영역 -->
+    <section class="input-section">
+      <div class="input-row">
+        <input
+          type="text"
+          id="todoInput"
+          class="todo-input"
+          placeholder="할 일을 입력하세요..."
+          maxlength="100"
+        />
+        <button id="addButton" class="btn btn-add">추가</button>
+      </div>
+      <!-- 입력값이 비어있을 때 표시되는 안내 메시지 -->
+      <p id="errorMessage" class="error-message hidden">할 일을 입력해주세요.</p>
+    </section>
+
+    <!-- Todo 목록 영역 -->
+    <section class="list-section">
+      <ul id="todoList" class="todo-list">
+        <!-- app.js에서 동적으로 항목이 추가됩니다 -->
+      </ul>
+
+      <!-- Todo가 하나도 없을 때 표시되는 빈 상태 메시지 -->
+      <div id="emptyState" class="empty-state">
+        <span class="empty-icon">📋</span>
+        <p>아직 할 일이 없어요.<br />위에서 추가해보세요!</p>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

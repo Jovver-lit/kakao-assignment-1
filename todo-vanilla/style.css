@@ -1,0 +1,340 @@
+/* ===========================
+   CSS 변수 & 리셋
+=========================== */
+:root {
+  --color-primary: #672be0;
+  --color-primary-light: #ede8fc;
+  --color-primary-dark: #4e1fb0;
+  --color-bg: #f7f5ff;
+  --color-surface: #ffffff;
+  --color-text: #1a1a2e;
+  --color-text-muted: #6b7280;
+  --color-border: #e5e0f5;
+  --color-danger: #e03b3b;
+  --color-success: #16a34a;
+  --color-done-text: #a0aec0;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --shadow-card: 0 2px 16px rgba(103, 43, 224, 0.07);
+  --transition: 0.18s ease;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  padding: 48px 16px;
+}
+
+/* ===========================
+   앱 전체 레이아웃
+=========================== */
+.app-wrapper {
+  width: 100%;
+  max-width: 560px;
+}
+
+/* ===========================
+   헤더
+=========================== */
+.app-header {
+  margin-bottom: 32px;
+}
+
+.app-title {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--color-primary);
+  letter-spacing: -0.5px;
+}
+
+.app-subtitle {
+  margin-top: 4px;
+  font-size: 14px;
+  color: var(--color-text-muted);
+}
+
+/* ===========================
+   입력 영역
+=========================== */
+.input-section {
+  margin-bottom: 24px;
+}
+
+.input-row {
+  display: flex;
+  gap: 10px;
+}
+
+.todo-input {
+  flex: 1;
+  height: 48px;
+  padding: 0 16px;
+  font-size: 15px;
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  outline: none;
+  transition: border-color var(--transition), box-shadow var(--transition);
+}
+
+.todo-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.todo-input:focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(103, 43, 224, 0.12);
+}
+
+/* 에러 상태일 때 입력창 테두리 */
+.todo-input.is-error {
+  border-color: var(--color-danger);
+  box-shadow: 0 0 0 3px rgba(224, 59, 59, 0.1);
+}
+
+/* ===========================
+   버튼 공통
+=========================== */
+.btn {
+  height: 48px;
+  padding: 0 20px;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: background-color var(--transition), transform var(--transition);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+/* 추가 버튼 */
+.btn-add {
+  background-color: var(--color-primary);
+  color: #fff;
+  white-space: nowrap;
+}
+
+.btn-add:hover {
+  background-color: var(--color-primary-dark);
+}
+
+/* ===========================
+   에러 메시지
+=========================== */
+.error-message {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--color-danger);
+}
+
+.hidden {
+  display: none;
+}
+
+/* ===========================
+   Todo 목록
+=========================== */
+.todo-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 개별 Todo 항목 */
+.todo-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  transition: border-color var(--transition), opacity var(--transition);
+  /* 추가 시 애니메이션 */
+  animation: fadeSlideIn 0.2s ease;
+}
+
+@keyframes fadeSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 완료된 Todo 항목 스타일 */
+.todo-item.is-done {
+  opacity: 0.6;
+  border-color: transparent;
+  background-color: var(--color-primary-light);
+}
+
+/* Todo 텍스트 */
+.todo-text {
+  flex: 1;
+  font-size: 15px;
+  line-height: 1.5;
+  word-break: break-all;
+  color: var(--color-text);
+}
+
+/* 완료 시 텍스트 취소선 */
+.todo-item.is-done .todo-text {
+  text-decoration: line-through;
+  color: var(--color-done-text);
+}
+
+/* 수정 중 인라인 입력창 */
+.todo-edit-input {
+  flex: 1;
+  font-size: 15px;
+  padding: 4px 10px;
+  border: 1.5px solid var(--color-primary);
+  border-radius: var(--radius-sm);
+  outline: none;
+  color: var(--color-text);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(103, 43, 224, 0.12);
+}
+
+/* ===========================
+   항목별 액션 버튼들
+=========================== */
+.todo-actions {
+  display: flex;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.btn-action {
+  height: 32px;
+  padding: 0 10px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  border: 1.5px solid transparent;
+  cursor: pointer;
+  transition: background-color var(--transition), color var(--transition), transform var(--transition);
+}
+
+.btn-action:active {
+  transform: scale(0.95);
+}
+
+/* 완료 버튼 */
+.btn-done {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+  border-color: var(--color-primary-light);
+}
+
+.btn-done:hover {
+  background-color: var(--color-primary);
+  color: #fff;
+}
+
+/* 완료 취소 버튼 (완료 상태일 때) */
+.btn-undone {
+  background-color: #e8f5e9;
+  color: var(--color-success);
+  border-color: #e8f5e9;
+}
+
+.btn-undone:hover {
+  background-color: var(--color-success);
+  color: #fff;
+}
+
+/* 수정 버튼 */
+.btn-edit {
+  background-color: #f3f4f6;
+  color: #374151;
+  border-color: #f3f4f6;
+}
+
+.btn-edit:hover {
+  background-color: #e5e7eb;
+}
+
+/* 저장 버튼 */
+.btn-save {
+  background-color: var(--color-success);
+  color: #fff;
+  border-color: var(--color-success);
+}
+
+.btn-save:hover {
+  background-color: #15803d;
+}
+
+/* 삭제 버튼 */
+.btn-delete {
+  background-color: #fff0f0;
+  color: var(--color-danger);
+  border-color: #fff0f0;
+}
+
+.btn-delete:hover {
+  background-color: var(--color-danger);
+  color: #fff;
+}
+
+/* ===========================
+   빈 상태 메시지
+=========================== */
+.empty-state {
+  text-align: center;
+  padding: 48px 0;
+  color: var(--color-text-muted);
+}
+
+.empty-icon {
+  font-size: 36px;
+  display: block;
+  margin-bottom: 12px;
+}
+
+.empty-state p {
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+/* ===========================
+   반응형
+=========================== */
+@media (max-width: 480px) {
+  body {
+    padding: 28px 12px;
+  }
+
+  .todo-actions {
+    gap: 4px;
+  }
+
+  .btn-action {
+    padding: 0 8px;
+    font-size: 11px;
+  }
+}
