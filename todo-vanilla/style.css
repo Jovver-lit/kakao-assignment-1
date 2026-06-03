@@ -50,7 +50,7 @@ body {
    헤더
 =========================== */
 .app-header {
-  margin-bottom: 32px;
+  margin-bottom: 28px;
 }
 
 .app-title {
@@ -58,19 +58,77 @@ body {
   font-weight: 700;
   color: var(--color-primary);
   letter-spacing: -0.5px;
+  margin-bottom: 16px;
 }
 
-.app-subtitle {
-  margin-top: 4px;
-  font-size: 14px;
+/* ===========================
+   날짜 네비게이터
+=========================== */
+.date-navigator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 10px 8px;
+  box-shadow: var(--shadow-card);
+}
+
+.date-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.date-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: -0.3px;
+}
+
+/* 오늘 날짜임을 나타내는 뱃지 */
+.today-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-primary);
+  background-color: var(--color-primary-light);
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+/* 이전/다음 날짜 이동 버튼 */
+.btn-date-nav {
+  width: 36px;
+  height: 36px;
+  font-size: 22px;
+  line-height: 1;
+  border: none;
+  border-radius: var(--radius-sm);
+  background-color: transparent;
   color: var(--color-text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition), color var(--transition), transform var(--transition);
+}
+
+.btn-date-nav:hover {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.btn-date-nav:active {
+  transform: scale(0.93);
 }
 
 /* ===========================
    입력 영역
 =========================== */
 .input-section {
-  margin-bottom: 24px;
+  margin-bottom: 20px;
 }
 
 .input-row {
@@ -149,6 +207,53 @@ body {
 }
 
 /* ===========================
+   필터 탭
+=========================== */
+.filter-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  background-color: var(--color-primary-light);
+  border-radius: var(--radius-md);
+  padding: 4px;
+}
+
+.filter-tab {
+  flex: 1;
+  height: 36px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--color-text-muted);
+  background-color: transparent;
+  transition: background-color var(--transition), color var(--transition), transform var(--transition);
+}
+
+.filter-tab:hover {
+  color: var(--color-primary);
+  background-color: rgba(103, 43, 224, 0.08);
+}
+
+/* 선택된 탭 스타일 */
+.filter-tab.is-active {
+  background-color: var(--color-primary);
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(103, 43, 224, 0.25);
+}
+
+.filter-tab.is-active:hover {
+  background-color: var(--color-primary-dark);
+  color: #fff;
+}
+
+.filter-tab:active {
+  transform: scale(0.97);
+}
+
+/* ===========================
    Todo 목록
 =========================== */
 .todo-list {
@@ -169,7 +274,6 @@ body {
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-card);
   transition: border-color var(--transition), opacity var(--transition);
-  /* 추가 시 애니메이션 */
   animation: fadeSlideIn 0.2s ease;
 }
 
@@ -243,7 +347,6 @@ body {
   transform: scale(0.95);
 }
 
-/* 완료 버튼 */
 .btn-done {
   background-color: var(--color-primary-light);
   color: var(--color-primary);
@@ -255,7 +358,6 @@ body {
   color: #fff;
 }
 
-/* 완료 취소 버튼 (완료 상태일 때) */
 .btn-undone {
   background-color: #e8f5e9;
   color: var(--color-success);
@@ -267,7 +369,6 @@ body {
   color: #fff;
 }
 
-/* 수정 버튼 */
 .btn-edit {
   background-color: #f3f4f6;
   color: #374151;
@@ -278,7 +379,6 @@ body {
   background-color: #e5e7eb;
 }
 
-/* 저장 버튼 */
 .btn-save {
   background-color: var(--color-success);
   color: #fff;
@@ -289,7 +389,6 @@ body {
   background-color: #15803d;
 }
 
-/* 삭제 버튼 */
 .btn-delete {
   background-color: #fff0f0;
   color: var(--color-danger);
@@ -329,6 +428,10 @@ body {
     padding: 28px 12px;
   }
 
+  .date-text {
+    font-size: 14px;
+  }
+
   .todo-actions {
     gap: 4px;
   }
@@ -337,4 +440,386 @@ body {
     padding: 0 8px;
     font-size: 11px;
   }
+}
+
+/* ===========================
+   달력 이모지 토글 버튼
+=========================== */
+
+/* 날짜 네비게이터 가운데 영역: 달력 버튼 + 날짜 텍스트를 묶는 컨테이너 */
+.date-center {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 달력 이모지 버튼 */
+.btn-calendar-toggle {
+  font-size: 20px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: var(--radius-sm);
+  line-height: 1;
+  transition: transform var(--transition), background-color var(--transition);
+  user-select: none;
+}
+
+.btn-calendar-toggle:hover {
+  background-color: var(--color-primary-light);
+  transform: scale(1.15);
+}
+
+.btn-calendar-toggle:active {
+  transform: scale(0.95);
+}
+
+/* ===========================
+   달력 팝업
+=========================== */
+.calendar-popup {
+  position: relative;
+  margin-top: 8px;
+  background-color: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 8px 32px rgba(103, 43, 224, 0.13);
+  padding: 16px;
+  animation: calendarFadeIn 0.18s ease;
+  z-index: 100;
+}
+
+@keyframes calendarFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 달력 팝업 헤더: 이전달 / 월 표시 / 다음달 */
+.calendar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.calendar-month-label {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text);
+  letter-spacing: -0.3px;
+}
+
+/* 달력 팝업 내 이전/다음 월 이동 버튼 */
+.btn-calendar-nav {
+  width: 32px;
+  height: 32px;
+  font-size: 20px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background-color: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition), color var(--transition), transform var(--transition);
+}
+
+.btn-calendar-nav:hover {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.btn-calendar-nav:active {
+  transform: scale(0.93);
+}
+
+/* 요일 헤더 행 */
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: 6px;
+}
+
+.weekday {
+  text-align: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  padding: 4px 0;
+}
+
+.weekday.sunday   { color: #e03b3b; }
+.weekday.saturday { color: #3b82f6; }
+
+/* 날짜 그리드 */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+/* 개별 날짜 셀 */
+.calendar-day {
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  border: none;
+  background: none;
+  cursor: pointer;
+  color: var(--color-text);
+  transition: background-color var(--transition), color var(--transition), transform var(--transition);
+  position: relative;
+}
+
+.calendar-day:hover {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.calendar-day:active {
+  transform: scale(0.9);
+}
+
+/* 이전/다음 달 날짜: 흐리게 표시 */
+.calendar-day.other-month {
+  color: #d1d5db;
+}
+
+.calendar-day.other-month:hover {
+  background-color: #f3f4f6;
+  color: var(--color-text-muted);
+}
+
+/* 일요일 날짜 */
+.calendar-day.sunday {
+  color: #e03b3b;
+}
+
+/* 토요일 날짜 */
+.calendar-day.saturday {
+  color: #3b82f6;
+}
+
+/* 오늘 날짜 표시 */
+.calendar-day.is-today::after {
+  content: '';
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+}
+
+/* 현재 선택된 날짜 */
+.calendar-day.is-selected {
+  background-color: var(--color-primary);
+  color: #fff !important;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(103, 43, 224, 0.3);
+}
+
+.calendar-day.is-selected::after {
+  background-color: #fff;
+}
+
+/* Todo가 있는 날짜: 상단에 작은 점 표시 */
+.calendar-day.has-todo::before {
+  content: '';
+  position: absolute;
+  top: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--color-primary);
+  opacity: 0.5;
+}
+
+.calendar-day.is-selected.has-todo::before {
+  background-color: #fff;
+  opacity: 0.7;
+}
+
+/* ===========================
+   주간 뷰
+=========================== */
+
+.week-view {
+  margin-top: 12px;
+}
+
+/* 주 네비게이션: 이전/다음 주 버튼 + 주 라벨 */
+.week-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.week-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  letter-spacing: -0.2px;
+}
+
+/* 이전/다음 주 이동 버튼 */
+.btn-week-nav {
+  width: 28px;
+  height: 28px;
+  font-size: 18px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background-color: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition), color var(--transition), transform var(--transition);
+}
+
+.btn-week-nav:hover {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.btn-week-nav:active {
+  transform: scale(0.9);
+}
+
+/* 요일 셀 7개를 가로로 나열 */
+.week-days-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+/* 개별 요일 셀 */
+.week-day-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 2px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid transparent;
+  background-color: var(--color-surface);
+  cursor: pointer;
+  transition: background-color var(--transition), border-color var(--transition), transform var(--transition);
+  /* 클릭 영역 확보 */
+  min-height: 64px;
+  justify-content: center;
+}
+
+.week-day-cell:hover {
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary-light);
+}
+
+.week-day-cell:active {
+  transform: scale(0.96);
+}
+
+/* 요일 텍스트 (월, 화, 수 ...) */
+.week-day-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  letter-spacing: -0.2px;
+}
+
+/* 날짜 숫자 */
+.week-day-date {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1;
+}
+
+/* Todo 개수 뱃지 */
+.week-day-count {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-primary);
+  background-color: var(--color-primary-light);
+  border-radius: 99px;
+  padding: 1px 6px;
+  min-width: 18px;
+  text-align: center;
+  /* Todo가 없을 때는 투명하게 처리해 레이아웃 유지 */
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+/* Todo가 있을 때만 뱃지 표시 */
+.week-day-cell.has-todo .week-day-count {
+  opacity: 1;
+}
+
+/* 일요일 날짜 색상 */
+.week-day-cell.sunday .week-day-date,
+.week-day-cell.sunday .week-day-name {
+  color: #e03b3b;
+}
+
+/* 토요일 날짜 색상 */
+.week-day-cell.saturday .week-day-date,
+.week-day-cell.saturday .week-day-name {
+  color: #3b82f6;
+}
+
+/* 오늘 날짜 강조 */
+.week-day-cell.is-today {
+  border-color: var(--color-primary);
+  background-color: var(red);
+  
+}
+
+.week-day-cell.is-today .week-day-date {
+  color: var(--color-primary);
+}
+
+.week-day-cell.is-today .week-day-name {
+  color: var(--color-primary);
+}
+
+/* 현재 선택된 날짜 */
+.week-day-cell.is-selected {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 10px rgba(103, 43, 224, 0.3);
+}
+
+.week-day-cell.is-selected .week-day-name,
+.week-day-cell.is-selected .week-day-date {
+  color: #fff;
+}
+
+.week-day-cell.is-selected .week-day-count {
+  background-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+/* 반응형: 화면이 좁을 때 날짜 폰트 축소 */
+@media (max-width: 480px) {
+  .week-day-date { font-size: 13px; }
+  .week-day-name { font-size: 10px; }
+  .week-day-cell { padding: 6px 1px; min-height: 56px; }
 }

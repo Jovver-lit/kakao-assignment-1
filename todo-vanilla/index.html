@@ -13,7 +13,50 @@
     <!-- 앱 헤더 -->
     <header class="app-header">
       <h1 class="app-title">My Todos</h1>
-      <p class="app-subtitle">오늘 할 일을 정리해보세요</p>
+
+      <!-- 날짜 네비게이터: 달력 이모지 + 선택 날짜 텍스트 + 이전/다음 하루 이동 -->
+      <div class="date-navigator">
+        <button id="prevDateButton" class="btn-date-nav" aria-label="이전 날짜">&#8249;</button>
+        <div class="date-center">
+          <button id="calendarToggleButton" class="btn-calendar-toggle" aria-label="달력 열기">📅</button>
+          <div class="date-display">
+            <span id="dateText" class="date-text"></span>
+            <span id="todayBadge" class="today-badge hidden">오늘</span>
+          </div>
+        </div>
+        <button id="nextDateButton" class="btn-date-nav" aria-label="다음 날짜">&#8250;</button>
+      </div>
+
+      <!-- 달력 팝업 -->
+      <div id="calendarPopup" class="calendar-popup hidden">
+        <div class="calendar-header">
+          <button id="prevMonthButton" class="btn-calendar-nav" aria-label="이전 달">&#8249;</button>
+          <span id="calendarMonthLabel" class="calendar-month-label"></span>
+          <button id="nextMonthButton" class="btn-calendar-nav" aria-label="다음 달">&#8250;</button>
+        </div>
+        <div class="calendar-weekdays">
+          <span class="weekday sunday">일</span>
+          <span class="weekday">월</span>
+          <span class="weekday">화</span>
+          <span class="weekday">수</span>
+          <span class="weekday">목</span>
+          <span class="weekday">금</span>
+          <span class="weekday saturday">토</span>
+        </div>
+        <div id="calendarGrid" class="calendar-grid"></div>
+      </div>
+
+      <!-- 주간 뷰: 이번 주 월~일 가로 나열 -->
+      <div class="week-view">
+        <!-- 이전/다음 주 이동 버튼 + 주 라벨 -->
+        <div class="week-nav">
+          <button id="prevWeekButton" class="btn-week-nav" aria-label="이전 주">&#8249;</button>
+          <span id="weekLabel" class="week-label"></span>
+          <button id="nextWeekButton" class="btn-week-nav" aria-label="다음 주">&#8250;</button>
+        </div>
+        <!-- 요일별 날짜 셀: app.js에서 동적으로 생성 -->
+        <div id="weekDaysRow" class="week-days-row"></div>
+      </div>
     </header>
 
     <!-- Todo 입력 영역 -->
@@ -28,20 +71,22 @@
         />
         <button id="addButton" class="btn btn-add">추가</button>
       </div>
-      <!-- 입력값이 비어있을 때 표시되는 안내 메시지 -->
       <p id="errorMessage" class="error-message hidden">할 일을 입력해주세요.</p>
     </section>
 
+    <!-- 상태별 필터 탭 -->
+    <nav class="filter-tabs">
+      <button class="filter-tab is-active" data-filter="all">전체</button>
+      <button class="filter-tab" data-filter="active">진행 중</button>
+      <button class="filter-tab" data-filter="done">완료</button>
+    </nav>
+
     <!-- Todo 목록 영역 -->
     <section class="list-section">
-      <ul id="todoList" class="todo-list">
-        <!-- app.js에서 동적으로 항목이 추가됩니다 -->
-      </ul>
-
-      <!-- Todo가 하나도 없을 때 표시되는 빈 상태 메시지 -->
+      <ul id="todoList" class="todo-list"></ul>
       <div id="emptyState" class="empty-state">
         <span class="empty-icon">📋</span>
-        <p>아직 할 일이 없어요.<br />위에서 추가해보세요!</p>
+        <p id="emptyMessage">아직 할 일이 없어요.<br />위에서 추가해보세요!</p>
       </div>
     </section>
 
