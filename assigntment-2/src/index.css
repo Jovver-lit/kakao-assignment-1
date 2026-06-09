@@ -307,3 +307,218 @@ body {
   .todo-actions { gap: 4px; }
   .btn-action { padding: 0 8px; font-size: 11px; }
 }
+
+/* ===========================
+   주간 뷰
+=========================== */
+.week-view {
+  margin-top: 12px;
+}
+
+.week-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.week-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  letter-spacing: -0.2px;
+}
+
+.btn-week-nav {
+  width: 28px;
+  height: 28px;
+  font-size: 18px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background-color: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition), color var(--transition), transform var(--transition);
+}
+
+.btn-week-nav:hover {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.btn-week-nav:active {
+  transform: scale(0.9);
+}
+
+.week-days-row {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.week-day-cell {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 2px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid transparent;
+  background-color: var(--color-surface);
+  cursor: pointer;
+  transition: background-color var(--transition), border-color var(--transition), transform var(--transition);
+  min-height: 64px;
+  justify-content: center;
+}
+
+.week-day-cell:hover {
+  background-color: var(--color-primary-light);
+  border-color: var(--color-primary-light);
+}
+
+.week-day-cell:active {
+  transform: scale(0.96);
+}
+
+.week-day-name {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  letter-spacing: -0.2px;
+}
+
+.week-day-date {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--color-text);
+  line-height: 1;
+}
+
+.week-day-count {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--color-primary);
+  background-color: var(--color-primary-light);
+  border-radius: 99px;
+  padding: 1px 6px;
+  min-width: 18px;
+  text-align: center;
+  opacity: 0;
+  transition: opacity var(--transition);
+}
+
+.week-day-cell.has-todo .week-day-count {
+  opacity: 1;
+}
+
+.week-day-cell.sunday .week-day-date,
+.week-day-cell.sunday .week-day-name {
+  color: #e03b3b;
+}
+
+.week-day-cell.saturday .week-day-date,
+.week-day-cell.saturday .week-day-name {
+  color: #3b82f6;
+}
+
+.week-day-cell.is-today {
+  border-color: var(--color-primary);
+  background-color: var(--color-primary-light);
+}
+
+.week-day-cell.is-today .week-day-date,
+.week-day-cell.is-today .week-day-name {
+  color: var(--color-primary);
+}
+
+.week-day-cell.is-selected {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 2px 10px rgba(103, 43, 224, 0.3);
+}
+
+.week-day-cell.is-selected .week-day-name,
+.week-day-cell.is-selected .week-day-date {
+  color: #fff;
+}
+
+.week-day-cell.is-selected .week-day-count {
+  background-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
+}
+
+/* 날짜 네비게이터 */
+.date-navigator {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--color-surface);
+  border: 1.5px solid var(--color-border);
+  border-radius: var(--radius-md);
+  padding: 10px 8px;
+  box-shadow: var(--shadow-card);
+  margin-bottom: 0;
+}
+
+.date-center {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.date-display {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.date-text {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--color-text);
+  letter-spacing: -0.3px;
+}
+
+.today-badge {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--color-primary);
+  background-color: var(--color-primary-light);
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+
+.btn-date-nav {
+  width: 36px;
+  height: 36px;
+  font-size: 22px;
+  line-height: 1;
+  border: none;
+  border-radius: var(--radius-sm);
+  background-color: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color var(--transition), color var(--transition), transform var(--transition);
+}
+
+.btn-date-nav:hover {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.btn-date-nav:active {
+  transform: scale(0.93);
+}
+
+@media (max-width: 480px) {
+  .week-day-date { font-size: 13px; }
+  .week-day-name { font-size: 10px; }
+  .week-day-cell { padding: 6px 1px; min-height: 56px; }
+  .date-text { font-size: 14px; }
+}

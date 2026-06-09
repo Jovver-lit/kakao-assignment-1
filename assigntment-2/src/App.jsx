@@ -1,33 +1,39 @@
 // App.jsx
-// 기존: 전역 변수(todoList, nextId, currentFilter, selectedDate)와
-//       DOM 이벤트 리스너들이 app.js 최상단에 분산
-// 변경: 모든 전역 상태를 App 컴포넌트의 useState로 끌어올림(state lifting)
+// 변경사항: selectedDate를 useState로 관리 (주간 뷰 날짜 이동 대응)
+//           WeekView 컴포넌트 추가
+//           formatDate, formatDateLabel을 dateUtils로 이동 후 import
 
 import { useState } from 'react';
-import useTodos from './hooks/UseTodos';
+import useTodos from './hooks/useTodos';
 import TodoInput from './components/todo/TodoInput';
 import TodoList from './components/todo/TodoList';
 import FilterTabs from './components/todo/FilterTabs';
-
-function formatDate(date) {
-  const year  = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const day   = String(date.getDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
-}
-
-function formatDateLabel(date) {
-  const weekDays = ['일', '월', '화', '수', '목', '금', '토'];
-  return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일 (${weekDays[date.getDay()]})`;
-}
+import WeekView from './components/view/WeekView';
+import { formatDate, formatDateLabel } from './utils/dateUtils';
 
 function App() {
   const { todoList, addTodo, toggleTodo, deleteTodo, updateTodo } = useTodos();
+
+  // 기존: let currentFilter = 'all' 전역 변수
   const [currentFilter, setCurrentFilter] = useState('all');
-  const [selectedDate] = useState(new Date());
+
+  // 기존: let selectedDate = new Date() 전역 변수
+  // 변경: useState로 관리 — WeekView의 날짜 클릭/주 이동 시 여기서 업데이트됨
+  const [selectedDate, setSelectedDate] = useState(new Date());
 
   const selectedDateStr = formatDate(selectedDate);
   const isTodaySelected = formatDate(new Date()) === selectedDateStr;
+
+  /**
+   * handleDateChange
+   * 기존: handleWeekDaySelect, moveWeekByDays 각각에서 selectedDate 직접 수정
+   *       + currentFilter = 'all' + updateFilterTabStyles() + render 함수들 수동 호출
+   * 변경: 날짜 변경 시 호출되는 단일 콜백으로 통합, React가 리렌더링 처리
+   */
+  const handleDateChange = (newDate) => {
+    setSelectedDate(newDate);
+    setCurrentFilter('all');
+  };
 
   const getFilteredTodoList = () => {
     const todosForDate = todoList.filter((todo) => todo.date === selectedDateStr);
@@ -53,20 +59,37 @@ function App() {
     <div className="app-wrapper">
       <header className="app-header">
         <h1 className="app-title">My Todos</h1>
-        <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', marginBottom: '4px' }}>
-          {formatDateLabel(selectedDate)}
-          {isTodaySelected && (
-            <span style={{
-              marginLeft: '8px',
-              fontSize: '11px',
-              fontWeight: 700,
-              color: 'var(--color-primary)',
-              background: 'var(--color-primary-light)',
-              padding: '2px 8px',
-              borderRadius: '99px',
-            }}>오늘</span>
-          )}
-        </p>
+
+        {/* 날짜 네비게이터 — 추후 컴포넌트 분리 예정 */}
+        <div className="date-navigator">
+          <button className="btn-date-nav" onClick={() => {
+            const newDate = new Date(selectedDate);
+            newDate.setDate(newDate.getDate() - 1);
+            handleDateChange(newDate);
+          }}>&#8249;</button>
+
+          <div className="date-center">
+            <div className="date-display">
+              <span className="date-text">{formatDateLabel(selectedDate)}</span>
+              {isTodaySelected && (
+                <span className="today-badge">오늘</span>
+              )}
+            </div>
+          </div>
+
+          <button className="btn-date-nav" onClick={() => {
+            const newDate = new Date(selectedDate);
+            newDate.setDate(newDate.getDate() + 1);
+            handleDateChange(newDate);
+          }}>&#8250;</button>
+        </div>
+
+        {/* 주간 뷰 */}
+        <WeekView
+          selectedDate={selectedDate}
+          todoList={todoList}
+          onDateChange={handleDateChange}
+        />
       </header>
 
       <TodoInput onAdd={handleAddTodo} />
