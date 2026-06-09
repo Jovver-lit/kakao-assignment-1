@@ -1,122 +1,93 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+// App.jsx
+// 기존: 전역 변수(todoList, nextId, currentFilter, selectedDate)와
+//       DOM 이벤트 리스너들이 app.js 최상단에 분산
+// 변경: 모든 전역 상태를 App 컴포넌트의 useState로 끌어올림(state lifting)
 
-function App() {
-  const [count, setCount] = useState(0)
+import { useState } from 'react';
+import useTodos from './hooks/UseTodos';
+import TodoInput from './components/todo/TodoInput';
+import TodoList from './components/todo/TodoList';
+import FilterTabs from './components/todo/FilterTabs';
 
-  return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
-  )
+function formatDate(date) {
+  const year  = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, '0');
+  const day   = String(date.getDate()).padStart(2, '0');
+  return `${year}-${month}-${day}`;
 }
 
-export default App
+function formatDateLabel(date) {
+  const weekDays = ['일', '월', '화', '수', '목', '금', '토'];
+  return `${date.getFullYear()}년 ${date.getMonth() + 1}월 ${date.getDate()}일 (${weekDays[date.getDay()]})`;
+}
+
+function App() {
+  const { todoList, addTodo, toggleTodo, deleteTodo, updateTodo } = useTodos();
+  const [currentFilter, setCurrentFilter] = useState('all');
+  const [selectedDate] = useState(new Date());
+
+  const selectedDateStr = formatDate(selectedDate);
+  const isTodaySelected = formatDate(new Date()) === selectedDateStr;
+
+  const getFilteredTodoList = () => {
+    const todosForDate = todoList.filter((todo) => todo.date === selectedDateStr);
+    switch (currentFilter) {
+      case 'active': return todosForDate.filter((todo) => !todo.isDone);
+      case 'done':   return todosForDate.filter((todo) =>  todo.isDone);
+      default:       return todosForDate;
+    }
+  };
+
+  const handleAddTodo = (text) => {
+    addTodo(text, selectedDateStr);
+    if (currentFilter === 'done') setCurrentFilter('all');
+  };
+
+  const handleFilterChange = (filter) => {
+    setCurrentFilter(filter);
+  };
+
+  const filteredList = getFilteredTodoList();
+
+  return (
+    <div className="app-wrapper">
+      <header className="app-header">
+        <h1 className="app-title">My Todos</h1>
+        <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', marginBottom: '4px' }}>
+          {formatDateLabel(selectedDate)}
+          {isTodaySelected && (
+            <span style={{
+              marginLeft: '8px',
+              fontSize: '11px',
+              fontWeight: 700,
+              color: 'var(--color-primary)',
+              background: 'var(--color-primary-light)',
+              padding: '2px 8px',
+              borderRadius: '99px',
+            }}>오늘</span>
+          )}
+        </p>
+      </header>
+
+      <TodoInput onAdd={handleAddTodo} />
+
+      <FilterTabs
+        currentFilter={currentFilter}
+        onFilterChange={handleFilterChange}
+      />
+
+      <section className="list-section">
+        <TodoList
+          filteredList={filteredList}
+          currentFilter={currentFilter}
+          isTodaySelected={isTodaySelected}
+          onToggle={toggleTodo}
+          onDelete={deleteTodo}
+          onUpdate={updateTodo}
+        />
+      </section>
+    </div>
+  );
+}
+
+export default App;
