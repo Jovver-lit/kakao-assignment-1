@@ -18,7 +18,7 @@ Vanilla JS로 구현한 Todo 앱을 React(Vite) 기반으로 마이그레이션�
 ## 파일 트리
 
 ```
-todo-react/
+assigmntment-2/
 ├── index.html                        # Vite 진입점 HTML
 ├── package.json
 ├── vite.config.js
